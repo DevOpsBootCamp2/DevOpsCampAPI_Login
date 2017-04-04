@@ -1,0 +1,42 @@
+pipeline:
+  buildjar:
+    image: maven:3.2-jdk-8
+    commands:
+      - mvn -q -DskipTests package
+  buildimage:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build
+         --label org.label-schema.vcs-ref=$DRONE_COMMIT_SHA
+         --label build-number=$DRONE_BUILD_NUMBER
+         --label build-date="$(date)"
+         -t devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA .
+  test:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker kill test || true
+      - docker rm test || true
+      - docker create --name test devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+      - docker cp ./test.sh test:/test.sh
+      - docker start test /test.sh
+  push:
+    image: docker
+    environment:
+      - PASS=${HUB_PASS}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker login -u mgopaul -p $PASS
+      - docker push devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+  deploy:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker pull devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+      - docker tag devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA devopsbootcamp2/devcamp_login:production
+      - docker stack deploy -c ./docker-compose.yml devcamp_login
