@@ -13,6 +13,6 @@ public class TokenTest {
 		token.setPassword("password");
 		
 		assertEquals("email", token.getEmail());
-		assertEquals("password",token.getPassword());
+		assertEquals("as",token.getPassword());
 	}
 }
