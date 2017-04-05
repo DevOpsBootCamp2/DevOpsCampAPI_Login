@@ -32,8 +32,8 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker login -u $USER -p $PASS
-      - docker tag devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
-      - docker tag devopsbootcamp2/devcamp_login:production
+      - docker tag devcamp_login devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+      - docker tag devcamp_login devopsbootcamp2/devcamp_login:production
       - docker push devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
   deploy: 
     image: docker
