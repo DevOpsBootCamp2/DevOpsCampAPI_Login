@@ -32,14 +32,15 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker login -u $USER -p $PASS
+      - docker tag devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+      - docker tag devopsbootcamp2/devcamp_login:production
       - docker push devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
   deploy: 
     image: docker
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker pull devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
-      #- docker deploy -c ./docker-compose.yml devcamp_login-service
+      - ssh $SSH_USER@$SSH_MANAGER /deploy_login.sh
   notify:
     when:
         status: [failure]
