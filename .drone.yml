@@ -35,10 +35,12 @@ pipeline:
   notify:
     when: [ failure ]
     image: amouat/network-utils
-    commands:
+    commands: 
       - chmod +x ./notifysuccessfailure.sh
       - ./notifysuccessfailure.sh
   finish:
     image: debian
-    commands:
+    commands: 
       - date
+
+ 
