@@ -12,6 +12,7 @@ pipeline:
          --label org.label-schema.vcs-ref=$DRONE_COMMIT_SHA
          --label build-number=$DRONE_BUILD_NUMBER
          --label build-date="$(date)"
+         --name devcamp_login
          -t devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA .
   test:
     image: docker
