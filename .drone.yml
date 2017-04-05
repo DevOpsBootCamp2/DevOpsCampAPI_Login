@@ -26,12 +26,20 @@ pipeline:
   push:
     image: docker
     environment:
+      - USER=${HUB_USER}
       - PASS=${HUB_PASS}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker login -u mgopaul -p $PASS
+      - docker login -u $USER -p $PASS
       - docker push devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+  deploy: 
+    image: docker
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker pull devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
+      - docker deploy -c ./docker-compose.yml devcamp_login-service
   notify:
     when:
         status: [failure]
