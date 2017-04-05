@@ -8,11 +8,14 @@ public class TokenTest {
 
 	@Test
 	public void testTokenIsConstructed(){
-		Token token = new Token();
-		token.setEmail("email");
-		token.setPassword("password");
+		String email = "email";
+		String password = "password";
 		
-		assertEquals("email", token.getEmail());
-		assertEquals("as",token.getPassword());
+		Token token = new Token();
+		token.setEmail(email);
+		token.setPassword(password);
+		
+		assertEquals(email, token.getEmail());
+		assertEquals(password,token.getPassword());
 	}
 }
