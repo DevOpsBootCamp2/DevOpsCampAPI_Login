@@ -2,7 +2,7 @@ pipeline:
   buildjar:
     image: maven:3.2-jdk-8
     commands:
-      - mvn -q -DskipTests package
+      - mvn -q package
   buildimage:
     image: docker
     volumes:
