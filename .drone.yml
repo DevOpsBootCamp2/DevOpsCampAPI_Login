@@ -39,7 +39,7 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker pull devopsbootcamp2/devcamp_login:$DRONE_COMMIT_SHA
-      - docker deploy -c ./docker-compose.yml devcamp_login-service
+      #- docker deploy -c ./docker-compose.yml devcamp_login-service
   notify:
     when:
         status: [failure]
